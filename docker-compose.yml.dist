@@ -1,0 +1,20 @@
+version: '2'
+services:
+    # Application Server
+    app:
+        image: "travisci-board:latest"
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        command: "php -S 0.0.0.0:80 -t web web/app.php"
+        environment:
+            TRAVISCI_FEEDS: >
+                https://api.travis-ci.org/repos/travis-ci/travis-ci/builds.json,
+                https://api.travis-ci.org/repos/sveneisenschmidt/selenium-server-standalone/builds.atom
+        ports:
+            - "9000:80" #host:client
+        volumes:
+            - ./:/var/www
+        working_dir: /var/www
+        stdin_open: true
+        tty: true
